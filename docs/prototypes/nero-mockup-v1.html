@@ -1,0 +1,304 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Nero — Mockup v1</title>
+<style>
+  :root{
+    --bg:#0e1726; --panel:#16233a; --panel2:#1d2d49; --line:#2a3c5e;
+    --ink:#e8eef7; --muted:#8aa0c0; --accent:#e0226b; --accent2:#ff4d8d;
+    --ok:#23c386; --warn:#f0a92b; --radius:22px;
+  }
+  *{box-sizing:border-box;margin:0;padding:0;font-family:'Segoe UI',system-ui,sans-serif}
+  body{background:linear-gradient(160deg,#0b1320,#101b2e);color:var(--ink);padding:32px 24px 60px}
+  header.top{max-width:1400px;margin:0 auto 8px}
+  h1{font-size:26px;letter-spacing:.5px}
+  h1 b{color:var(--accent2)}
+  .sub{color:var(--muted);font-size:14px;margin-top:4px}
+  .tag{display:inline-block;background:var(--panel);border:1px solid var(--line);color:var(--muted);
+       font-size:11px;padding:3px 9px;border-radius:20px;margin-top:10px}
+
+  /* flujo */
+  .flow{max-width:1400px;margin:22px auto 30px;display:flex;align-items:center;gap:6px;flex-wrap:wrap}
+  .flow .step{background:var(--panel);border:1px solid var(--line);border-radius:30px;
+       padding:8px 16px;font-size:13px;color:var(--ink);white-space:nowrap}
+  .flow .step b{color:var(--accent2)}
+  .flow .arrow{color:var(--accent);font-size:18px}
+
+  /* galería de telefonos */
+  .gallery{max-width:1400px;margin:0 auto;display:flex;gap:30px;flex-wrap:wrap;justify-content:center}
+  .device{width:300px}
+  .label{text-align:center;color:var(--muted);font-size:13px;margin-bottom:10px}
+  .label span{display:inline-block;background:var(--accent);color:#fff;width:22px;height:22px;
+       line-height:22px;border-radius:50%;font-size:12px;margin-right:6px;font-weight:700}
+  .phone{background:#05080f;border:9px solid #05080f;border-radius:38px;
+       box-shadow:0 18px 40px rgba(0,0,0,.5);overflow:hidden;height:600px;position:relative}
+  .notch{position:absolute;top:0;left:50%;transform:translateX(-50%);width:120px;height:22px;
+       background:#05080f;border-radius:0 0 16px 16px;z-index:5}
+  .screen{height:100%;background:var(--bg);display:flex;flex-direction:column;overflow:hidden}
+
+  /* barra superior de app */
+  .appbar{background:var(--panel);padding:26px 16px 12px;display:flex;align-items:center;gap:10px;
+       border-bottom:1px solid var(--line)}
+  .appbar .back{color:var(--muted);font-size:18px}
+  .appbar h2{font-size:15px;font-weight:600}
+  .appbar .logo{font-size:16px;font-weight:800;letter-spacing:1px}
+  .appbar .logo b{color:var(--accent2)}
+  .body{flex:1;padding:16px;overflow:auto}
+  .body::-webkit-scrollbar{width:0}
+
+  /* botones */
+  .btn{display:block;width:100%;text-align:center;padding:14px;border-radius:14px;border:none;
+       font-size:15px;font-weight:600;cursor:default}
+  .btn.primary{background:var(--accent);color:#fff}
+  .btn.ghost{background:transparent;border:1px solid var(--line);color:var(--ink)}
+  .btn.big{padding:22px;font-size:16px}
+
+  /* tarjetas / listas */
+  .card{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:13px;margin-bottom:10px}
+  .row{display:flex;justify-content:space-between;align-items:center}
+  .muted{color:var(--muted);font-size:12px}
+  .big-num{font-size:13px}
+  .pill{font-size:10px;padding:2px 8px;border-radius:20px;font-weight:700}
+  .pill.ok{background:rgba(35,195,134,.15);color:var(--ok);border:1px solid rgba(35,195,134,.4)}
+  .pill.warn{background:rgba(240,169,43,.15);color:var(--warn);border:1px solid rgba(240,169,43,.45)}
+
+  /* captura */
+  .cam{flex:1;background:repeating-linear-gradient(45deg,#0a1422,#0a1422 12px,#0c1830 12px,#0c1830 24px);
+       position:relative;display:flex;align-items:center;justify-content:center}
+  .frame-guide{width:78%;height:62%;border:2px dashed rgba(255,255,255,.45);border-radius:10px;
+       display:flex;align-items:center;justify-content:center;color:rgba(255,255,255,.55);font-size:12px;text-align:center;padding:10px}
+  .shutter-bar{background:#05080f;padding:18px;display:flex;justify-content:center}
+  .shutter{width:62px;height:62px;border-radius:50%;background:#fff;border:5px solid #2a3c5e}
+  .thumb{width:40px;height:52px;border-radius:6px;background:#1d2d49;border:1px solid var(--line);
+       display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:11px}
+  .thumb.add{border-style:dashed;color:var(--accent2);font-size:18px}
+
+  /* procesando */
+  .center{flex:1;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;padding:24px;text-align:center}
+  .spinner{width:54px;height:54px;border-radius:50%;border:5px solid var(--line);border-top-color:var(--accent);
+       animation:spin 1s linear infinite}
+  @keyframes spin{to{transform:rotate(360deg)}}
+
+  /* tabla de lineas */
+  .line-item{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:11px;margin-bottom:9px}
+  .line-item.warn{border-color:rgba(240,169,43,.5)}
+  .line-top{display:flex;justify-content:space-between;gap:8px}
+  .line-name{font-size:13px;font-weight:600;line-height:1.25}
+  .line-meta{color:var(--muted);font-size:11px;margin-top:5px;display:flex;gap:12px}
+  .total-bar{background:var(--panel2);border-top:1px solid var(--line);padding:14px 16px}
+  .total-bar .row{margin-bottom:5px}
+  .total-bar .grand{font-size:18px;font-weight:800;color:var(--accent2)}
+
+  /* formularios */
+  .field{margin-bottom:13px}
+  .field label{display:block;color:var(--muted);font-size:11px;margin-bottom:5px}
+  .field .input{background:var(--panel2);border:1px solid var(--line);border-radius:10px;
+       padding:11px;font-size:14px;color:var(--ink)}
+  .field .input.focus{border-color:var(--accent);box-shadow:0 0 0 2px rgba(224,34,107,.25)}
+  .two{display:flex;gap:10px}.two>.field{flex:1}
+  .notice{background:rgba(240,169,43,.12);border:1px solid rgba(240,169,43,.45);color:var(--warn);
+       font-size:11px;border-radius:10px;padding:9px;margin-bottom:13px}
+
+  /* confirmacion */
+  .check{width:80px;height:80px;border-radius:50%;background:rgba(35,195,134,.15);
+       border:2px solid var(--ok);color:var(--ok);font-size:42px;display:flex;align-items:center;justify-content:center}
+
+  footer{max-width:1400px;margin:34px auto 0;color:var(--muted);font-size:12px;text-align:center;line-height:1.6}
+</style>
+</head>
+<body>
+
+<header class="top">
+  <h1><b>Nero</b> — Mockup v1</h1>
+  <div class="sub">Cómo se verá la app y el flujo de ingesta de facturas en primera instancia. Maqueta visual estática (no funcional) para revisión del equipo.</div>
+  <span class="tag">Tema oscuro · acento magenta · 8 pantallas</span>
+</header>
+
+<div class="flow">
+  <span class="step"><b>1</b> Inicio</span><span class="arrow">→</span>
+  <span class="step"><b>2</b> Capturar (1+ fotos)</span><span class="arrow">→</span>
+  <span class="step"><b>3</b> Procesando</span><span class="arrow">→</span>
+  <span class="step"><b>4</b> Revisión</span><span class="arrow">→</span>
+  <span class="step"><b>5</b> Mapear proveedor</span><span class="arrow">→</span>
+  <span class="step"><b>6/7</b> Editar línea · precio</span><span class="arrow">→</span>
+  <span class="step"><b>8</b> Confirmación</span>
+</div>
+
+<div class="gallery">
+
+  <!-- 1. INICIO -->
+  <div class="device">
+    <div class="label"><span>1</span>Inicio</div>
+    <div class="phone"><div class="notch"></div><div class="screen">
+      <div class="appbar"><div class="logo"><b>N</b>ero</div></div>
+      <div class="body">
+        <div style="text-align:center;color:var(--muted);font-size:12px;margin:6px 0 16px">Hola, Maritza 👋</div>
+        <button class="btn primary big" style="margin-bottom:8px">📷 Escanear factura</button>
+        <div class="muted" style="text-align:center;margin-bottom:18px">Toma una foto y deja que Nero la registre</div>
+        <div class="muted" style="margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px;font-size:10px">Últimas facturas</div>
+        <div class="card"><div class="row"><div><div class="big-num">26-100-000990</div><div class="muted">Distrib. La Cosecha · 8 prod.</div></div><span class="pill ok">Ingresada</span></div></div>
+        <div class="card"><div class="row"><div><div class="big-num">26-100-000989</div><div class="muted">Lácteos Andes · 5 prod.</div></div><span class="pill ok">Ingresada</span></div></div>
+        <div class="card"><div class="row"><div><div class="big-num">26-100-000988</div><div class="muted">Aceites Luker · 3 prod.</div></div><span class="pill ok">Ingresada</span></div></div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- 2. CAPTURA (multi-foto) -->
+  <div class="device">
+    <div class="label"><span>2</span>Capturar foto(s)</div>
+    <div class="phone"><div class="notch"></div><div class="screen">
+      <div class="appbar"><span class="back">←</span><h2>Capturar factura</h2></div>
+      <div class="cam">
+        <div class="frame-guide">Encuadra la factura dentro del marco</div>
+      </div>
+      <div style="background:#05080f;padding:10px 12px 0;display:flex;gap:8px;align-items:center">
+        <div class="thumb">P1</div>
+        <div class="thumb">P2</div>
+        <div class="thumb add">＋</div>
+        <span class="muted" style="margin-left:auto">2 páginas</span>
+      </div>
+      <div class="shutter-bar" style="gap:14px;align-items:center">
+        <div class="shutter"></div>
+        <button class="btn primary" style="width:auto;padding:12px 18px">Procesar 2 fotos</button>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- 3. PROCESANDO -->
+  <div class="device">
+    <div class="label"><span>3</span>Procesando</div>
+    <div class="phone"><div class="notch"></div><div class="screen">
+      <div class="appbar"><h2>Procesando…</h2></div>
+      <div class="center">
+        <div class="spinner"></div>
+        <div style="font-size:15px;font-weight:600">Leyendo factura con IA</div>
+        <div class="muted">Uniendo páginas, extrayendo proveedor y productos, y mapeándolos contra el catálogo…</div>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- 4. REVISIÓN -->
+  <div class="device">
+    <div class="label"><span>4</span>Revisión de factura</div>
+    <div class="phone"><div class="notch"></div><div class="screen">
+      <div class="appbar"><span class="back">←</span><h2>Revisar factura</h2></div>
+      <div class="body" style="padding-bottom:6px">
+        <div class="card warn" style="margin-bottom:12px;border:1px solid rgba(240,169,43,.5)">
+          <div class="row"><span class="muted">Proveedor</span><span class="pill warn">⚠ sin mapear</span></div>
+          <div class="big-num" style="margin-top:5px">Distrib. La Cosecha</div>
+          <div class="muted" style="margin-top:2px">Toca para mapear o crear el proveedor</div>
+          <div class="row" style="margin-top:10px"><span class="muted">Fecha</span><span class="big-num">11/06/2026</span></div>
+          <div class="row" style="margin-top:6px"><span class="muted">N° documento</span><span class="big-num">26-100-000991</span></div>
+        </div>
+        <div class="line-item">
+          <div class="line-top"><div class="line-name">ACEITE OLIVA OLIVETTO 250ML</div><span class="pill ok">✓ mapeado</span></div>
+          <div class="line-meta"><span>Cant. 10</span><span>$15.883</span><span>Cód. 32308</span></div>
+        </div>
+        <div class="line-item">
+          <div class="line-top"><div class="line-name">ARROZ DIANA 500G</div><span class="pill ok">✓ mapeado</span></div>
+          <div class="line-meta"><span>Cant. 24</span><span>$2.100</span><span>Cód. 10455</span></div>
+        </div>
+        <div class="line-item warn">
+          <div class="line-top"><div class="line-name">PANELA REDONDA X 1KG</div><span class="pill warn">⚠ sin mapear</span></div>
+          <div class="line-meta"><span>Cant. 12</span><span>$3.400</span><span>Toca asignar</span></div>
+        </div>
+      </div>
+      <div class="total-bar">
+        <div class="row"><span class="muted">3 productos · 1 por revisar</span></div>
+        <div class="row"><span>Total</span><span class="grand">$268.488</span></div>
+        <button class="btn primary" style="margin-top:10px">Confirmar e ingresar</button>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- 5. MAPEAR PROVEEDOR -->
+  <div class="device">
+    <div class="label"><span>5</span>Mapear proveedor</div>
+    <div class="phone"><div class="notch"></div><div class="screen">
+      <div class="appbar"><span class="back">←</span><h2>Proveedor</h2></div>
+      <div class="body">
+        <div class="muted" style="margin-bottom:6px">Detectado en la factura</div>
+        <div class="line-name" style="margin-bottom:14px">Distrib. La Cosecha</div>
+        <div class="field"><label>Buscar en el sistema</label><div class="input focus">distri la cose…</div></div>
+        <div class="muted" style="margin-bottom:8px;text-transform:uppercase;letter-spacing:.5px;font-size:10px">Coincidencias</div>
+        <div class="card"><div class="row"><div><div class="big-num">Distribuidora La Cosecha SAS</div><div class="muted">Cód. 174 · proveedor</div></div><span class="pill ok">92%</span></div></div>
+        <div class="card"><div class="row"><div><div class="big-num">La Cosecha Mayorista</div><div class="muted">Cód. 53 · proveedor</div></div><span class="pill warn">61%</span></div></div>
+        <button class="btn primary" style="margin-top:6px">Usar seleccionado</button>
+        <button class="btn ghost" style="margin-top:8px">＋ Crear proveedor nuevo</button>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- 6. EDITAR LÍNEA -->
+  <div class="device">
+    <div class="label"><span>6</span>Editar línea</div>
+    <div class="phone"><div class="notch"></div><div class="screen">
+      <div class="appbar"><span class="back">←</span><h2>Editar producto</h2></div>
+      <div class="body">
+        <div class="line-name" style="margin-bottom:14px">ACEITE OLIVA OLIVETTO 250ML</div>
+        <div class="two">
+          <div class="field"><label>Cantidad</label><div class="input focus">10 UN</div></div>
+          <div class="field"><label>Costo unitario</label><div class="input">$15.883</div></div>
+        </div>
+        <div class="two">
+          <div class="field"><label>Precio antes de imp.</label><div class="input">$15.883</div></div>
+          <div class="field"><label>Impuesto %</label><div class="input">0%</div></div>
+        </div>
+        <div class="field"><label>Descuento</label><div class="input">0%</div></div>
+        <div class="card"><div class="row"><span>Total línea</span><span class="grand" style="font-size:16px">$158.830</span></div></div>
+        <button class="btn primary" style="margin-top:14px">Guardar línea</button>
+        <button class="btn ghost" style="margin-top:8px">Eliminar</button>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- 7. EDITAR PRECIO -->
+  <div class="device">
+    <div class="label"><span>7</span>Editar precio de producto</div>
+    <div class="phone"><div class="notch"></div><div class="screen">
+      <div class="appbar"><span class="back">←</span><h2>Precio del producto</h2></div>
+      <div class="body">
+        <div class="line-name" style="margin-bottom:6px">ARROZ DIANA 500G</div>
+        <div class="muted" style="margin-bottom:14px">Cód. 10455 · El proveedor cambió el costo</div>
+        <div class="field"><label>Costo (compra)</label><div class="input focus">$2.100</div></div>
+        <div class="two">
+          <div class="field"><label>Margen %</label><div class="input">28%</div></div>
+          <div class="field"><label>Precio de venta</label><div class="input">$2.690</div></div>
+        </div>
+        <div class="muted" style="margin:-4px 0 14px">Último precio de compra: $1.950</div>
+        <div class="notice">⚠ Este producto tiene el cambio de precio bloqueado (<i>IsPriceChangeAllowed = 0</i>). Pide autorización para editarlo.</div>
+        <button class="btn primary">Guardar precio</button>
+      </div>
+    </div></div>
+  </div>
+
+  <!-- 8. CONFIRMACIÓN -->
+  <div class="device">
+    <div class="label"><span>8</span>Confirmación</div>
+    <div class="phone"><div class="notch"></div><div class="screen">
+      <div class="appbar"><h2>Listo</h2></div>
+      <div class="center">
+        <div class="check">✓</div>
+        <div style="font-size:17px;font-weight:700">Documento ingresado en el POS</div>
+        <div class="card" style="width:100%;text-align:left">
+          <div class="row"><span class="muted">N° documento</span><span class="big-num">26-100-000991</span></div>
+          <div class="row" style="margin-top:6px"><span class="muted">Productos</span><span class="big-num">3</span></div>
+          <div class="row" style="margin-top:6px"><span class="muted">Total</span><span class="big-num">$268.488</span></div>
+        </div>
+        <button class="btn primary" style="width:100%">Escanear otra factura</button>
+        <button class="btn ghost" style="width:100%;margin-top:8px">Ir al inicio</button>
+      </div>
+    </div></div>
+  </div>
+
+</div>
+
+<footer>
+  Maqueta v1 · sin lógica real · datos de ejemplo. El flujo y las pantallas son para alinear con el equipo;
+  el detalle visual final se ajustará en diseño.
+</footer>
+
+</body>
+</html>
