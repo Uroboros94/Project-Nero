@@ -48,3 +48,23 @@ Línea base de `fact_compras`: 990 facturas de compra, 5 cajer@s activos.
 
 - Reportes de costo en tiempo real.
 - Optimización automática de la curva de precios (márgenes).
+
+## Implementation Plan
+
+Se agregan a continuación los puntos de implementación escalable, organizados como elementos de trabajo:
+
+- Definir alcance y requisitos: recopilar casos de uso, KPIs, restricciones POS y datos de entrada (fotos).
+- Diseñar arquitectura general: microservicios, colas, almacenamiento objetos, BFF/mobile, DBs y límites de escala.
+- Especificar modelos de datos y APIs: esquemas JSON para `Document`, `DocumentItem`, `Supplier`, `Product` y contratos REST/gRPC.
+- Prototipo OCR/Visión: validar extracción foto→JSON (Claude Vision, Tesseract o AI APIs) con dataset real.
+- Servicio de mapeo y matching: proveedor↔Customer y producto↔catálogo (código exacto → fuzzy → embeddings).
+- Pipeline de procesamiento: orquestar ingestión multi-foto→merge, normalización, NLU y encolamiento asíncrono.
+- Integración POS y persistencia: adaptador para escribir `Document`/`DocumentItem` en el POS, manejo transaccional y efectos en stock.
+- App móvil (captura + UI): cliente (React Native/Flutter), captura multi-página offline, cola local y UX de revisión.
+- Infra, CI/CD y despliegue: contenedores, IaC (Terraform), pipelines, despliegue escalable (K8s/autoscaling).
+- Observabilidad y telemetría: logs correlacionados, tracing distribuido, métricas y alertas para SLA/KPI.
+- Seguridad y cumplimiento: autenticación, autorización, cifrado en tránsito/descanso, gestión de PII y retención.
+- Pruebas y validación: unit, integración y end-to-end (captura→POS), performance y validación con datos reales.
+- Plan de despliegue gradual: canary, feature flags, rollout por tiendas y plan de rollback.
+- Runbooks y mantenimiento: playbooks para incidentes, backups, rotación de keys y SLAs.
+- Estimación y roadmap por fases: priorizar MVP → mejoras de matching → optimizaciones de ML y escala.
