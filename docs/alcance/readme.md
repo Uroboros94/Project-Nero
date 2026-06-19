@@ -67,3 +67,42 @@ Automatizar la ingesta de facturas de compra mediante captura móvil y procesami
 ---
 
 Archivo creado para iniciar la definición de alcance; actualizar iterativamente con hallazgos y decisiones técnicas.
+
+## Requisitos de conexión y sandbox
+
+El sistema debe soportar múltiples mecanismos de persistencia y facilitar entornos de prueba (sandbox). A continuación se indican formatos y requisitos mínimos.
+
+- Mecanismos soportados: SQLite (local), PostgreSQL, MySQL/MariaDB y APIs HTTP/REST del POS.
+- Formatos de conexión (ejemplos):
+	- SQLite: `sqlite:///path/to/pos.db`
+	- PostgreSQL: `postgresql://user:password@host:5432/dbname`
+	- MySQL: `mysql://user:password@host:3306/dbname`
+	- API: `https://pos.example.com/api/v1` con token Bearer en `Authorization`.
+
+- Credenciales y seguridad:
+	- Uso de secretos almacenados en vault/secret manager; no guardar credenciales en repositorio.
+	- TLS obligatorio para conexiones remotas; SSH túnel permitido para accesos restringidos.
+	- Rotación de claves y expiración de tokens definida en runbooks.
+
+- Permisos mínimos para adaptador:
+	- Lectura de catálogo (`SELECT`) y escritura de documentos/transacciones (`INSERT`, `UPDATE`) en tablas relevantes.
+	- Permisos para consultar triggers/metadatos que impacten stock.
+
+- Sandbox requerido:
+	- Copia anonymizada o subset del POS en sandbox con mismos esquemas y triggers.
+	- Endpoint de prueba (DB/HTTP) accesible desde la VPC/entorno de desarrollo.
+	- Dataset de pruebas con ~200 facturas representativas para validar OCR/ML y transacciones.
+
+- Comportamiento transaccional y triggers:
+	- El adaptador debe ejecutar operaciones en transacciones ACID cuando la BD lo soporte.
+	- Documentar efectos secundarios (ej. triggers que decrementan stock) y proporcionar modo "dry-run" para validaciones.
+
+- Backup y migraciones:
+	- Procedimiento de backup antes de integraciones en producción.
+	- Scripts de migración versionados (Flyway/liquibase) si se requieren cambios en esquema.
+
+- Observabilidad y pruebas de integración:
+	- Endpoints de salud y métricas en adaptador.
+	- Test de integración automatizado contra sandbox (captura→procesamiento→escritura).
+
+Agregar detalles de conexión concretos y contactos de infraestructura al preparar el sandbox.
